@@ -941,9 +941,18 @@ export async function createRun({
      * contain dynamic values (e.g. conversationId) that are only known after
      * agent initialization.
      */
+    const safeUser = createSafeUser(user);
+    if (llmConfig.configuration?.defaultHeaders != null) {
+      logger.debug('[agents:buildAgentInput] Resolving custom endpoint headers', {
+        agentId: agent.id,
+        provider: agent.provider,
+        headerKeys: Object.keys(llmConfig.configuration.defaultHeaders),
+        hasFederatedTokens: !!(safeUser as { federatedTokens?: unknown }).federatedTokens,
+      });
+    }
     resolveConfigHeaders({
       llmConfig,
-      user: createSafeUser(user),
+      user: safeUser,
       body: requestBody,
     });
 

@@ -1,5 +1,6 @@
 import type { AnthropicClientOptions } from '@librechat/agents';
 import type { IUser } from '@librechat/data-schemas';
+import { logger } from '@librechat/data-schemas';
 import type { RequestBody, RunLLMConfig } from '~/types';
 import { resolveHeaders } from './env';
 
@@ -117,6 +118,12 @@ export function resolveConfigHeaders({
   const configuration = llmConfig.configuration as DefaultHeadersContainer | undefined;
   if (configuration?.defaultHeaders != null) {
     configuration.defaultHeaders = resolveOnce(configuration.defaultHeaders);
+    logger.debug('[resolveConfigHeaders] Resolved OpenAI configuration.defaultHeaders', {
+      headerKeys: Object.keys(configuration.defaultHeaders),
+      headersResolved: Object.values(configuration.defaultHeaders).every(
+        (v) => !v.includes('{{LIBRECHAT_OPENID_'),
+      ),
+    });
   }
 
   const clientOptions = (llmConfig as AnthropicClientOptions).clientOptions as

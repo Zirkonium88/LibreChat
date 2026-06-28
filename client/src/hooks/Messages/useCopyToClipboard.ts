@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef } from 'react';
-import copy from 'copy-to-clipboard';
 import { ContentTypes, SearchResultData } from 'librechat-data-provider';
 import type { TMessage } from 'librechat-data-provider';
 import {
@@ -9,6 +8,7 @@ import {
   STANDALONE_PATTERN,
   INVALID_CITATION_REGEX,
 } from '~/utils/citations';
+import { copyRichText } from '~/utils/copyRichText';
 
 type Source = {
   link: string;
@@ -70,7 +70,7 @@ export default function useCopyToClipboard({
           .replace(INVALID_CITATION_REGEX, '')
           .replace(CLEANUP_REGEX, '');
 
-        copy(cleanedText, { format: 'text/plain' });
+        void copyRichText(cleanedText);
         copyTimeoutRef.current = setTimeout(() => {
           setIsCopied(false);
         }, 3000);
@@ -95,7 +95,7 @@ export default function useCopyToClipboard({
         }
       }
 
-      copy(processedText, { format: 'text/plain' });
+      void copyRichText(processedText);
       copyTimeoutRef.current = setTimeout(() => {
         setIsCopied(false);
       }, 3000);

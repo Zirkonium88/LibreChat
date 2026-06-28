@@ -81,6 +81,7 @@
     "librechat-data-provider": "*",
     "lodash": "^4.17.23",
     "lucide-react": "^0.394.0",
+    "marked": "^14.0.0",
     "match-sorter": "^8.1.0",
     "mdast-util-directive": "^3.0.0",
     "mdast-util-from-markdown": "^2.0.1",
